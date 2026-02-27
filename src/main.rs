@@ -9,7 +9,7 @@ use std::thread;
 use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicBool, Ordering};
 use pcap::Device;
-use inquire::{Confirm, Select};
+use inquire::{Select};
 use etherparse::{NetSlice, SlicedPacket};
 use chrono::Local;
 use crossterm::event::{self, Event, KeyCode, KeyEvent};
@@ -31,7 +31,6 @@ fn main() {
     let ans = Select::new("Choose a network port:", device_names.clone()).prompt();
     let packet_list: Arc<Mutex<LinkedList<ParsedPacket>>> = Arc::new(Mutex::new(LinkedList::new()));
     let mut sessions_list: LinkedList<LinkedList<ParsedPacket>> = LinkedList::new();
-    let mut safe_to_file = false;
     let menu_options = vec![
         "Start new Session",
         "Show Sessions",
@@ -54,10 +53,6 @@ fn main() {
         },
         Err(_) => println!("Selection canceled"),
     }
-
-
-    let now = Local::now();
-
 
     while true {
         let ans = Select::new("Menu:", menu_options.clone()).prompt();        match ans {
