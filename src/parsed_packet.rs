@@ -1,6 +1,7 @@
-use std::net::IpAddr;
 use crate::ip_address::IPAddress;
 use crate::protocol::Protocol;
+
+#[derive(Clone)]
 
 pub struct ParsedPacket {
     pub link :String,
@@ -18,16 +19,6 @@ impl ParsedPacket {
             protocol: protocol,
             transport: transport.to_string(),
             payload: payload.to_string(),
-        }
-    }
-
-    pub fn clone(&self) -> ParsedPacket {
-        ParsedPacket {
-            link: self.link.clone(),
-            ip: self.ip.clone(),
-            protocol: self.protocol.clone(),
-            transport: self.transport.clone(),
-            payload: self.payload.clone(),
         }
     }
 

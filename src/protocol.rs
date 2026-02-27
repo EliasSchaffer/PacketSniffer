@@ -1,5 +1,6 @@
 use crate::parsed_packet::ParsedPacket;
 
+#[derive(Clone)]
 pub struct Protocol {
     protocol: String,
     source_port:String,
@@ -23,14 +24,7 @@ impl Protocol {
             destination_port: String::new(),
         }
     }
-
-    pub fn clone(&self) -> Protocol {
-        Protocol {
-            protocol: self.protocol.clone(),
-            source_port: self.source_port.clone(),
-            destination_port: self.destination_port.clone(),
-        }
-    }
+    
     pub fn print(&self) {
         println!("Protocol: {}", self.protocol);
         println!("Source Port: {}", self.source_port);

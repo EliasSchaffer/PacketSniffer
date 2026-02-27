@@ -1,3 +1,4 @@
+#[derive(Clone)]
 pub struct IPAddress {
     ipv4_source :String,
     ipv4_destination :String,
@@ -25,14 +26,6 @@ impl IPAddress {
         }  
     }
     
-    pub fn clone(&self) -> Self {
-        Self {
-            ipv4_source: self.ipv4_source.clone(),
-            ipv4_destination: self.ipv4_destination.clone(),
-            ipv6_source: self.ipv6_source.clone(),
-            ipv6_destination: self.ipv6_destination.clone(),
-        }
-    }
     
     pub fn print(&self) {
         println!("IPv4 Source: {}", self.ipv4_source);

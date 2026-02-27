@@ -40,14 +40,14 @@ fn main() {
 
     let mut capture = selected_device.open().unwrap();
 
-    if let Ok(packet) = capture.next_packet() {
+    while let Ok(packet) = capture.next_packet() {
         print_and_safe_packet(&packet, &mut packet_list);
     }
 }
 
 fn print_and_safe_packet(packet: &pcap::Packet, packet_list: &mut LinkedList<ParsedPacket>) {
 
-    while let Ok(sliced) = SlicedPacket::from_ethernet(packet.data) {
+    if let Ok(sliced) = SlicedPacket::from_ethernet(packet.data) {
 
         let mut temp_link = String::new();
         let mut temp_ip = IPAddress::new_empty();
@@ -84,53 +84,52 @@ fn print_and_safe_packet(packet: &pcap::Packet, packet_list: &mut LinkedList<Par
         packet_list.push_back(parsed_packet.clone());
         parsed_packet.print();
     }
+}
 
+fn parse_payload(payload: &[u8]) -> String {
+    let mut s = String::new();
 
-    fn parse_payload(payload: &[u8]) -> String {
-        let mut s = String::new();
-
-        if payload.is_empty() {
-            write!(&mut s, "Payload: <empty>").unwrap();
-            return s;
-        }
-
-        // HEX part
-        write!(&mut s, "Payload HEX: ").unwrap();
-        for b in payload {
-            write!(&mut s, "{:02x} ", b).unwrap();
-        }
-
-        // ASCII part
-        write!(&mut s, " | ASCII: ").unwrap();
-        for b in payload {
-            if b.is_ascii_graphic() || *b == b' ' {
-                s.push(*b as char);
-            } else {
-                s.push('.');
-            }
-        }
-
-        s
+    if payload.is_empty() {
+        write!(&mut s, "Payload: <empty>").unwrap();
+        return s;
     }
 
-    fn parse_ip(net: NetSlice) -> IPAddress {
-        let mut ipv4_source= String::new();
-        let mut ipv4_destination= String::new();
-        let mut ipv6_source= String::new();
-        let mut ipv6_destination= String::new();
-        match net {
-            etherparse::NetSlice::Ipv4(ipv4) => {
-
-                ipv4_source = ipv4.header().source_addr().to_string();
-                ipv4_destination = ipv4.header().destination_addr().to_string();
-
-
-            }
-            etherparse::NetSlice::Ipv6(ipv6) => {
-                ipv6_source = ipv6.header().source_addr().to_string();
-                ipv6_destination = ipv6.header().destination_addr().to_string();
-            }
-        }
-        return IPAddress::new(&ipv4_source, &ipv4_destination, &ipv6_source, &ipv6_destination)
+    // HEX part
+    write!(&mut s, "Payload HEX: ").unwrap();
+    for b in payload {
+        write!(&mut s, "{:02x} ", b).unwrap();
     }
+
+    // ASCII part
+    write!(&mut s, " | ASCII: ").unwrap();
+    for b in payload {
+        if b.is_ascii_graphic() || *b == b' ' {
+            s.push(*b as char);
+        } else {
+            s.push('.');
+        }
+    }
+
+    s
+}
+
+fn parse_ip(net: NetSlice) -> IPAddress {
+    let mut ipv4_source= String::new();
+    let mut ipv4_destination= String::new();
+    let mut ipv6_source= String::new();
+    let mut ipv6_destination= String::new();
+    match net {
+        etherparse::NetSlice::Ipv4(ipv4) => {
+
+            ipv4_source = ipv4.header().source_addr().to_string();
+            ipv4_destination = ipv4.header().destination_addr().to_string();
+
+
+        }
+        etherparse::NetSlice::Ipv6(ipv6) => {
+            ipv6_source = ipv6.header().source_addr().to_string();
+            ipv6_destination = ipv6.header().destination_addr().to_string();
+        }
+    }
+    return IPAddress::new(&ipv4_source, &ipv4_destination, &ipv6_source, &ipv6_destination)
 }
