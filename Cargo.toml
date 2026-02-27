@@ -6,3 +6,5 @@ edition = "2024"
 [dependencies]
 pcap = "2.4.0"
 inquire = "0.9.4"
+etherparse = "0.15"
+string-builder = "0.2"
