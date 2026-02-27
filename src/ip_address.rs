@@ -1,9 +1,21 @@
+use std::fmt::{Display, Formatter, Result as FmtResult};
+
 #[derive(Clone)]
 pub struct IPAddress {
     ipv4_source :String,
     ipv4_destination :String,
     ipv6_source :String,
     ipv6_destination :String,
+}
+
+impl Display for IPAddress {
+    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+        write!(
+            f,
+            "IPv4 Source: {} | IPv4 Destination: {} | IPv6 Source: {} | IPv6 Destination: {}",
+            self.ipv4_source, self.ipv4_destination, self.ipv6_source, self.ipv6_destination
+        )
+    }
 }
 
 impl IPAddress {

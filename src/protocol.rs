@@ -1,10 +1,20 @@
-use crate::parsed_packet::ParsedPacket;
+use std::fmt::{Display, Formatter, Result as FmtResult};
 
 #[derive(Clone)]
 pub struct Protocol {
     protocol: String,
     source_port:String,
     destination_port:String,
+}
+
+impl Display for Protocol {
+    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+        write!(
+            f,
+            "Protocol: {} | Source Port: {} | Destination Port: {}",
+            self.protocol, self.source_port, self.destination_port
+        )
+    }
 }
 
 impl Protocol {

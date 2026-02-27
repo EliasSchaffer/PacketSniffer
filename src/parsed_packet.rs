@@ -1,5 +1,6 @@
 use crate::ip_address::IPAddress;
 use crate::protocol::Protocol;
+use std::fmt::{self, Display, Formatter};
 
 #[derive(Clone)]
 
@@ -9,6 +10,16 @@ pub struct ParsedPacket {
     pub protocol :Protocol,
     pub transport :String,
     pub payload :String,
+}
+
+impl Display for ParsedPacket {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "_______________________________\n{} | {}\nPayload: {}\n_______________________________",
+            self.ip, self.protocol, self.payload
+        )
+    }
 }
 
 impl ParsedPacket {
@@ -30,6 +41,5 @@ impl ParsedPacket {
         println!("_______________________________");
 
     }
-
-
 }
+
