@@ -1,7 +1,5 @@
 # PacketSniffer
 
-> **⚠️ Disclaimer:** This README was AI-generated using GitHub Copilot.
-
 A lightweight **network packet sniffer** written in Rust that captures and displays network traffic in real-time. Built as a learning project to understand Rust systems programming, network protocols, and packet parsing.
 
 ## Features
@@ -10,9 +8,10 @@ A lightweight **network packet sniffer** written in Rust that captures and displ
 - 🔍 Real-time packet capture from any network interface
 - 📊 Support for **IPv4 and IPv6** address parsing
 - 🔌 **TCP and UDP** transport layer protocol detection
-- 💾 Packet storage in a linked list (for future processing)
+- 💾 Packet storage in a linked list for session processing
 - 📝 Payload display in both **HEX and ASCII** formats
 - 🎯 Interactive network interface selection via CLI
+- 💾 **Session-based file logging** with timestamped files
 
 ## Requirements
 
@@ -47,27 +46,28 @@ sudo cargo run --release
 ## Usage
 
 1. Start the application
-2. Select a network interface from the interactive menu
-3. The program will display captured packets in real-time
-4. Each packet shows:
+2. **Optional:** Choose to save captured packets to a file (you'll be prompted)
+3. Select a network interface from the interactive menu
+4. The program will display captured packets in real-time
+5. Each packet shows:
    - Source/Destination IPv4 and IPv6 addresses
    - Protocol type (TCP/UDP)
    - Source/Destination ports
    - Packet payload in HEX and ASCII
 
-**Example Output:**
+If you chose to save packets, they will be written to a timestamped file: `packets_log_2026-02-27_14-30-45.txt`
+
+**Example Console Output:**
 ```
 _______________________________
-IPv4 Source: 192.168.1.100
-IPv4 Destination: 8.8.8.8
-IPv6 Source: ::
-IPv6 Destination: ::
-Protocol: TCP
-Source Port: 54321
-Destination Port: 443
-Payload HEX: 47 45 54 20 2f | ASCII: GET /
+IPv4 Source: 192.168.1.100 | IPv4 Destination: 8.8.8.8 | IPv6 Source: :: | IPv6 Destination: ::
+Protocol: TCP | Source Port: 54321 | Destination Port: 443
+Payload: Payload HEX: 47 45 54 20 2f | ASCII: GET /
 _______________________________
 ```
+
+**Example File Output:**
+Each session creates a new file (e.g., `packets_log_YYYY-MM-DD_HH-MM-SS.txt`) containing all packets captured in that session with the same formatted output.
 
 ## Project Structure
 
@@ -91,31 +91,18 @@ PacketSniffer/
 | `inquire` | 0.9.4 | Interactive CLI prompts |
 | `etherparse` | 0.15 | Network packet parsing |
 | `string-builder` | 0.2 | String formatting utilities |
+| `chrono` | Latest | Timestamp generation for file naming |
 
-## Known Issues & TODO
+## Recent Updates
 
-### Current Limitations:
-- ⚠️ Minimal error handling (uses `.unwrap()` in critical paths)
-- ⚠️ No persistent storage of captured packets
-- ⚠️ Limited to TCP/UDP protocols (other transports ignored)
-- ⚠️ Ports stored as strings (should be `u16`)
+### ✅ Implemented:
+- Multi-packet capture loop (captures continuously)
+- Display trait implementations for clean formatting
+- Session-based file logging with timestamped filenames
+- Interactive prompt for file saving at startup
+- Proper Clone derivations instead of manual implementations
 
-### Planned Improvements:
-- 🔧 Robust error handling with `Result<T, E>`
-- 🎨 TUI dashboard with real-time statistics (using crossterm)
-- 🔗 Protocol filtering (by port, IP, protocol type)
-- 💾 Export to PCAP file format
-- 📈 Packet statistics and counters
-- 🧪 Unit tests for parsing functions
-- 📚 Comprehensive documentation
 
-## License
-
-[Specify your license here - MIT, Apache 2.0, etc.]
-
-## Author
-
-Created as a first Rust project | February 2026
 
 ---
 
@@ -127,3 +114,7 @@ Created as a first Rust project | February 2026
 ---
 
 *This is an educational project. Use responsibly and ensure you have permission to monitor network traffic on your systems.*
+
+---
+
+> **⚠️ Disclaimer:** Portions of this README were AI-generated using GitHub Copilot.
