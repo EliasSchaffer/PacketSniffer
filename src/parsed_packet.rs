@@ -1,6 +1,7 @@
 use crate::ip_address::IPAddress;
 use crate::protocol::Protocol;
 use std::fmt::{self, Display, Formatter};
+use crate::payload::Payload;
 
 #[derive(Clone)]
 
@@ -9,27 +10,27 @@ pub struct ParsedPacket {
     pub ip :IPAddress,
     pub protocol :Protocol,
     pub transport :String,
-    pub payload :String,
+    pub payload :Payload,
 }
 
 impl Display for ParsedPacket {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "_______________________________\n{} | {}\nPayload: {}\n_______________________________",
+            "_______________________________\n{} | {}\n{}\n_______________________________",
             self.ip, self.protocol, self.payload
         )
     }
 }
 
 impl ParsedPacket {
-    pub fn new(link: String, ip: IPAddress, protocol: Protocol, transport: String, payload: String) -> Self {
+    pub fn new(link: String, ip: IPAddress, protocol: Protocol, transport: String, payload: Payload) -> Self {
         Self {
             link: link.to_string(),
             ip: ip,
             protocol: protocol,
             transport: transport.to_string(),
-            payload: payload.to_string(),
+            payload: payload,
         }
     }
 
@@ -37,7 +38,7 @@ impl ParsedPacket {
         println!("_______________________________");
         self.ip.print();
         self.protocol.print();
-        println!("Payload: {}", self.payload);
+        println!("{}", self.payload);
         println!("_______________________________");
 
     }
